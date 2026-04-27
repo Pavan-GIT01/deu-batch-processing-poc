@@ -1,0 +1,49 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.13'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.asc'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+    // AWS SQS
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs:3.1.1'
+
+    // AWS S3
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1'
+
+    // JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testCompileOnly 'org.projectlombok:lombok'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

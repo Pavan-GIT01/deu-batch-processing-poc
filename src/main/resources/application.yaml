@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: deu-batch-processing
+  datasource:
+    #url: jdbc:postgresql://localhost:5432/testdb
+    #username: postgres
+    #password: postgres
+    #EC2 postgresql db
+    url: jdbc:postgresql://ec2-54-236-62-154.compute-1.amazonaws.com:5432/mydb
+    username: postgres
+    password: mypassword
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        default_schema: public  # ← Add this explicitly
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  cloud:
+    aws:
+      region:
+        #static: ap-south-1
+        static: us-east-1
+
+app:
+  sqs:
+    dispatcher-queue-url: https://sqs.us-east-1.amazonaws.com/947858754920/dispatcher-queue
+    batch-queue-url: https://sqs.us-east-1.amazonaws.com/947858754920/batch-queue
+  s3:
+    bucket: sqs-postgresql-bucket
