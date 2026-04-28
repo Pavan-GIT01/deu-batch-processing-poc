@@ -1,11 +1,10 @@
 package com.asc.deu_batch_processing.entity;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.Instant;
 
 @Entity
 @Getter

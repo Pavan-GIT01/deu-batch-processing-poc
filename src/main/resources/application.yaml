@@ -26,7 +26,7 @@ spring:
 
 app:
   sqs:
-    dispatcher-queue-url: https://sqs.us-east-1.amazonaws.com/947858754920/dispatcher-queue
-    batch-queue-url: https://sqs.us-east-1.amazonaws.com/947858754920/batch-queue
+    dispatcher-queue-url: dispatcher-queue
+    batch-queue-url: batch-queue
   s3:
     bucket: sqs-postgresql-bucket

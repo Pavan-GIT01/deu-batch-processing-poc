@@ -5,13 +5,6 @@ import com.asc.deu_batch_processing.entity.EmployeeRecord;
 import com.asc.deu_batch_processing.repository.EmployeeRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +13,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 @Service
 @Slf4j
@@ -118,7 +117,8 @@ public class FileProcessingService {
         .toList(); // Java 16+
   }
 
-  private Optional<EmployeeRecord> toBatchRecord(JsonNode node, String sourceFile, String queueType) {
+  private Optional<EmployeeRecord> toBatchRecord(
+      JsonNode node, String sourceFile, String queueType) {
     var firstName = getText(node, BatchProcessConstant.FIRSTNAME);
     var lastName = getText(node, BatchProcessConstant.LASTNAME);
     var email = getText(node, BatchProcessConstant.EMAIL);
