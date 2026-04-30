@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Represents an employee record with basic details and processing metadata. */
 @Entity
 @Getter
 @Setter

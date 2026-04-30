@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
+/**
+ * Processes SQS messages, reads JSON files from S3, and saves employee records (batch or direct).
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -39,7 +42,6 @@ public class FileProcessingService {
 
       JsonNode event = objectMapper.readTree(sqsMessage);
 
-      // Skip s3 test events
       if (isTestEvent(event)) {
         log.info("Ignoring S3 TestEvent");
         return;
@@ -81,11 +83,12 @@ public class FileProcessingService {
     }
   }
 
+  /** Checks if the event is an S3 test event. */
   private boolean isTestEvent(JsonNode event) {
     return "s3:TestEvent".equals(event.path(BatchProcessConstant.EVENT).asText());
   }
 
-  // Extracts the S3 object key from an SQS message containing an S3 event notification.
+  /** Extracts S3 object key from event. */
   private Optional<String> extractS3Key(JsonNode event) {
     return Optional.ofNullable(event.path(BatchProcessConstant.RECORDS))
         .filter(JsonNode::isArray)
@@ -94,7 +97,7 @@ public class FileProcessingService {
         .map(r -> r.path(BatchProcessConstant.S3).path("object").path("key").asText(null));
   }
 
-  // Download S3 object and read entire content as UTF-8 string (loads fully into memory)
+  /** Downloads file content from S3. */
   private String downloadFromS3(String key) throws IOException {
     try (InputStream is =
         s3Client.getObject(GetObjectRequest.builder().bucket(bucket).key(key).build())) {
@@ -102,7 +105,7 @@ public class FileProcessingService {
     }
   }
 
-  // parse JSON array
+  /** Parses JSON into employee records. */
   private List<EmployeeRecord> parseRecords(String json, String sourceFile, String queueType)
       throws IOException {
     // 3. Parse JSON and map to entity
@@ -117,6 +120,7 @@ public class FileProcessingService {
         .toList(); // Java 16+
   }
 
+  /** Converts JSON node to EmployeeRecord. */
   private Optional<EmployeeRecord> toBatchRecord(
       JsonNode node, String sourceFile, String queueType) {
     var firstName = getText(node, BatchProcessConstant.FIRSTNAME);
@@ -139,6 +143,7 @@ public class FileProcessingService {
     return Optional.of(record);
   }
 
+  /** Safely extracts text value from JSON node. */
   private String getText(JsonNode node, String field) {
     var valueNode = node.get(field);
     return (valueNode == null || valueNode.isNull()) ? null : valueNode.asText();
