@@ -24,7 +24,7 @@ S3 → Lambda → SQS → Dispatcher → Batch Service → Database
 ## Features
 - Batch processing (100 records per batch)
 - Supports large files (1 lakh+ records)
-- Error handling & retry mechanism
+- Error handling 
 - Queue-based scalable design
 
 ## Notes
